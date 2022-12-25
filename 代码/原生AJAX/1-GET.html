@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>AJAX GET 请求</title>
+  <style>
+    #result {
+      width: 200px;
+      height: 100px;
+      border: solid 1px #90b;
+    }
+  </style>
+</head>
+<body>
+  <button>点击发送请求</button>
+  <div id="result"></div>
+
+  <script>
+    //获取button元素
+    const btn = document.getElementsByTagName('button')[0]
+    const result = document.getElementById('result')
+    //绑定事件
+    btn.onclick = function () {
+      //1. 创建对象
+      // IE9+
+      const xhr = new XMLHttpRequest()
+      // IE9以下
+      // const xhr = new ActiveXObject('Mricosoft.XMLHTTP')
+      //2. 初始化 设置请求方法和 url
+      // xhr.open()可以有5个参数，xhr.open(method,URL,flag,name,password)
+      /**
+       * method：该参数用于指定HTTP的请求方法，一共有get、post、head、put、delete五种方法，常用的方法为get和post。
+       *
+       * URL：该参数用于指定HTTP请求的URL地址，可以是绝对URL，也可以是相对URL。
+       *
+       * flag：该参数为可选，参数值为布尔型。该参数用于指定是否使用异步方式。true表示异步、false表示同步，默认为true。
+       *
+       * name：该参数为可选参数，用于输入用户名。如果服务器需要验证，则必须使用该参数。
+       *
+       * password：该参数为可选，用于输入密码。若服务器需要验证，则必须使用该参数。
+       * */
+      xhr.open('GET', 'http://127.0.0.1:8000/server?a=100&b=200&c=300', true)
+      //3. 发送
+      xhr.send()
+      //4. 事件绑定 处理服务端返回的结果
+      // on  when 当....时候
+      // readystate 是 xhr 对象中的属性, 表示状态 0 1 2 3 4
+      /**
+       * 0: XMLHttpRequest对象创建完成。——还没有调用open()方法
+       * 1: XMLHttpRequest对象初始化完成。——已调用open()方法,但未调用send()方法，正在发送请求
+       * 2: 请求已经发送——send()方法完成,还未收到响应内容
+       * 3: 服务器返回了数据（但是还没有被解析，可能只一段http报文）——收到部分响应，正在解析响应内容
+       * 4: 数据解析完成——响应内容解析完成,可以在客户端调用了
+       */
+      // change  改变
+      xhr.onreadystatechange = function () {
+        //判断 (服务端返回了所有的结果)
+        if (xhr.readyState === 4) {
+          // 判断响应状态码 200 404 403 401 500
+          // 2xx 成功
+          if (xhr.status >= 200 && xhr.status < 300) {
+            //处理结果  行 头 空行 体
+            //响应
+            // console.log(xhr.status);//状态码
+            // console.log(xhr.statusText);//状态字符串
+            // console.log(xhr.getAllResponseHeaders());//所有响应头
+            // console.log(xhr.response);//响应体
+            //设置 result 的文本
+            result.innerHTML = xhr.response
+          } else {
+
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
